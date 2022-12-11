@@ -15,7 +15,8 @@ function draw() {
     
     const grid = document.querySelectorAll(".grid-cell");
     grid.forEach((cell) => {
-        cell.addEventListener("mousedown", () => {
+        cell.addEventListener("mousedown", (e) => {
+            e.preventDefault();
             if (erase.value == "off") {        
                 mouseDown = true;
                 cell.style.backgroundColor = "black"}
@@ -26,7 +27,8 @@ function draw() {
     })
     
     grid.forEach((cell) => {
-        cell.addEventListener("mouseup", () => {
+        cell.addEventListener("mouseup", (e) => {
+            e.preventDefault();
             if (erase.value =="off") {mouseDown = false;
                 if (cell.style.backgroundColor == "black") {
                     cell.style.backgroundColor == "black";
@@ -42,7 +44,8 @@ function draw() {
     })
     
     grid.forEach((cell) => {
-        cell.addEventListener("mouseenter", () => {
+        cell.addEventListener("mouseenter", (e) => {
+            e.preventDefault();
             if (erase.value == "off") {if (mouseDown) {
                 cell.style.backgroundColor = "black"
             } else if (mouseDown == false && cell.style.backgroundColor == "black") {
@@ -58,7 +61,8 @@ function draw() {
     })
     
     grid.forEach((cell) => {
-        cell.addEventListener("mouseleave", () => {
+        cell.addEventListener("mouseleave", (e) => {
+            e.preventDefault();
             if (erase.value == "off") {if (mouseDown) {
                 cell.style.backgroundColor = "black"
             } else if (mouseDown == false && cell.style.backgroundColor == "black") {
