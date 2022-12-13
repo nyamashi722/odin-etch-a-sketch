@@ -6,10 +6,11 @@ for (i = 0; i < 625; i++) {
     gridContainer.appendChild(gridCell);
 }
 
+const button = document.querySelector("button")
 const clearBoard = document.querySelector(".erase-board");
 const erase = document.querySelector(".eraser");
 const size = document.querySelector(".size-selector");
-let mouseDown = false;
+const rainbow = document.querySelector(".rainbow")
 
 function draw() {
     
@@ -17,62 +18,33 @@ function draw() {
     grid.forEach((cell) => {
         cell.addEventListener("mousedown", (e) => {
             e.preventDefault();
-            if (erase.value == "off") {        
-                mouseDown = true;
-                cell.style.backgroundColor = "black"}
-            else {       
-                mouseDown = true;
+            if (erase.value == "off") {
+                if (rainbow.value == "off") {
+                cell.style.backgroundColor = "black"
+                } else {
+                cell.style.backgroundColor = `#${randomColour()}`
+                }
+            } else if (erase.value == "on") {       
                 cell.style.backgroundColor = "white"}
-        })
-    })
-    
-    grid.forEach((cell) => {
-        cell.addEventListener("mouseup", (e) => {
-            e.preventDefault();
-            if (erase.value =="off") {mouseDown = false;
-                if (cell.style.backgroundColor == "black") {
-                    cell.style.backgroundColor == "black";
-                } else if (cell.style.backgroundColor == "white") {
-                    cell.style.backgroundColor == "white"
-                }} else {mousedown = false;
-                    if (cell.style.backgroundColor == "white") {
-                    cell.style.backgroundColor == "white";
-                } else if (cell.style.backgroundColor == "black") {
-                    cell.style.backgroundColor == "black"
-                }}
         })
     })
     
     grid.forEach((cell) => {
         cell.addEventListener("mouseenter", (e) => {
             e.preventDefault();
-            if (erase.value == "off") {if (mouseDown) {
-                cell.style.backgroundColor = "black"
-            } else if (mouseDown == false && cell.style.backgroundColor == "black") {
-                cell.style.backgroundColor = "black"
-            }} else {if (mouseDown) {
+            if (erase.value == "off") {
+                if (e.buttons > 0) {
+                    if (rainbow.value == "off") {
+                        cell.style.backgroundColor = "black"
+                        } else {
+                        cell.style.backgroundColor = `#${randomColour()}`
+                    }
+                } 
+            } else if (erase.value == "on") {
+                if (e.buttons > 0) {
                 cell.style.backgroundColor = "white"
-            } else if (mouseDown == false && cell.style.backgroundColor == "white") {
-                cell.style.backgroundColor = "white"
-            }}
-            
-            
-        })
-    })
-    
-    grid.forEach((cell) => {
-        cell.addEventListener("mouseleave", (e) => {
-            e.preventDefault();
-            if (erase.value == "off") {if (mouseDown) {
-                cell.style.backgroundColor = "black"
-            } else if (mouseDown == false && cell.style.backgroundColor == "black") {
-                cell.style.backgroundColor = "black"
-            }} else {if (mouseDown) {
-                cell.style.backgroundColor = "white"
-            } else if (mouseDown == false && cell.style.backgroundColor == "white") {
-                cell.style.backgroundColor = "white"
-            }}
-            
+                }
+            }
         })
     })
 };
@@ -119,15 +91,50 @@ function eraseBoard() {
     })
 };
 
+function eraseBtnOn () {
+    erase.style.color = "white";
+    erase.style.backgroundColor = "black";
+}
+
+function eraseBtnOff () {
+    erase.style.color = "black";
+    erase.style.backgroundColor = "";
+}
+
+function rainbowBtnOn () {
+    rainbow.style.color = "white";
+    rainbow.style.backgroundColor = "black"
+}
+
+function rainbowBtnOff () {
+    rainbow.style.color = "black";
+    rainbow.style.backgroundColor = ""
+}
+
 //changing toggle eraser button background color.
 erase.addEventListener("click", () => {
     if (erase.value == "off") {
         erase.value = "on";
-        erase.style.color = "white"
-        erase.style.backgroundColor = "black"
-    } else if (erase.value == "on") {
+        eraseBtnOn();
+    } else {
         erase.value = "off";
-        erase.style.color = "black"
-        erase.style.backgroundColor = ""
+        eraseBtnOff();
     }
 })
+
+
+rainbow.addEventListener("click", () => {
+    if (rainbow.value == "off") {
+        rainbow.value = "on";
+        rainbowBtnOn();
+    } else {
+        rainbow.value ="off"
+        rainbowBtnOff();
+    }
+})
+
+
+function randomColour() {
+    let randomColour = Math.floor(Math.random() * 16777215).toString(16);
+    return randomColour;
+  }
