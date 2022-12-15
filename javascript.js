@@ -6,12 +6,13 @@ for (i = 0; i < 625; i++) {
     gridContainer.appendChild(gridCell);
 }
 
-const buttons = document.querySelectorAll("button")
+const buttons = document.querySelectorAll("button");
 const clearBoard = document.querySelector(".erase-board");
 const erase = document.querySelector(".eraser");
 const size = document.querySelector(".size-selector");
-const rainbow = document.querySelector(".rainbow")
-const shade = document.querySelector(".shade")
+const rainbow = document.querySelector(".rainbow");
+const shade = document.querySelector(".shade");
+const light = document.querySelector(".lighten");
 
 function draw() {
     const grid = document.querySelectorAll(".grid-cell");
@@ -19,17 +20,17 @@ function draw() {
         cell.addEventListener("mousedown", (e) => {
             e.preventDefault();
             if (erase.value == "off") {
-                if (rainbow.value == "off" && shade.value == "off") {
+                if (rainbow.value == "off" && shade.value == "off" && light.value == "off") {
                     e.target.style.backgroundColor = "rgb(0, 0, 0)"
                     e.target.setAttribute("data-filled", "true")
                     e.target.removeAttribute("data-shaded")
                     e.target.removeAttribute("data-colored")
-                } else if (rainbow.value == "on" && shade.value == "off") {
+                } else if (rainbow.value == "on") {
                     e.target.style.backgroundColor = `#${randomColor()}`
                     e.target.setAttribute("data-colored", "true")
                     e.target.removeAttribute("data-shaded")
                     e.target.removeAttribute("data-filled")
-                } else if (rainbow.value == "off" && shade.value == "on") {
+                } else if (shade.value == "on") {
                     if (!e.target.dataset.shaded && !e.target.dataset.filled && !e.target.dataset.colored) {
                         e.target.style.backgroundColor = "rgb(240, 240, 240)"
                         e.target.setAttribute("data-shaded", "1")
@@ -47,6 +48,24 @@ function draw() {
                             e.target.style.backgroundColor = `${newShade(e.target.style.backgroundColor)}`
                         }
                     }
+                } else if (light.value == "on") {
+                    if (!e.target.dataset.shaded && !e.target.dataset.filled && !e.target.dataset.colored) {
+                        e.target.style.backgroundColor = "rgb(255, 255, 255)"
+                        e.target.setAttribute("data-shaded", "1")
+                        e.target.removeAttribute("data-colored")
+                        e.target.removeAttribute("data-filled")
+                    } else if (!e.target.dataset.shaded && e.target.dataset.filled && !e.target.dataset.colored) {
+                        e.target.style.backgroundColor = `${newLighten(e.target.style.backgroundColor)}`
+                    } else if (!e.target.dataset.shaded && !e.target.dataset.filled && e.target.dataset.colored) {
+                        e.target.style.backgroundColor = `${newLighten(e.target.style.backgroundColor)}`
+                    } else {
+                        if (e.target.dataset.shaded < 18) {
+                            let shadeValue = parseFloat(e.target.getAttribute("data-shaded"));
+                            shadeValue++;
+                            e.target.setAttribute("data-shaded", `${shadeValue}`)
+                            e.target.style.backgroundColor = `${newLighten(e.target.style.backgroundColor)}`
+                        }
+                    }
                 }
             } else if (erase.value == "on") {       
                 e.target.style.backgroundColor = "rgb(255, 255, 255)"
@@ -61,17 +80,17 @@ function draw() {
             e.preventDefault();
             if (erase.value == "off") {
                 if (e.buttons > 0) {
-                    if (rainbow.value == "off" && shade.value == "off") {
+                    if (rainbow.value == "off" && shade.value == "off" && light.value == "off") {
                         e.target.style.backgroundColor = "rgb(0, 0, 0)"
                         e.target.setAttribute("data-filled", "true")
                         e.target.removeAttribute("data-shaded")
                         e.target.removeAttribute("data-colored")
-                    } else if (rainbow.value == "on" && shade.value == "off") {
+                    } else if (rainbow.value == "on") {
                         e.target.style.backgroundColor = `#${randomColor()}`
                         e.target.setAttribute("data-colored", "true")
                         e.target.removeAttribute("data-shaded")
                         e.target.removeAttribute("data-filled")
-                    } else if (rainbow.value == "off" && shade.value == "on") {
+                    } else if (shade.value == "on") {
                         if (!e.target.dataset.shaded && !e.target.dataset.filled && !e.target.dataset.colored) {
                             e.target.style.backgroundColor = "rgb(240, 240, 240)"
                             e.target.setAttribute("data-shaded", "1")
@@ -87,6 +106,24 @@ function draw() {
                                 shadeValue++;
                                 e.target.setAttribute("data-shaded", `${shadeValue}`)
                                 e.target.style.backgroundColor = `${newShade(e.target.style.backgroundColor)}`
+                            }
+                        }
+                    } else if (light.value == "on") {
+                        if (!e.target.dataset.shaded && !e.target.dataset.filled && !e.target.dataset.colored) {
+                            e.target.style.backgroundColor = "rgb(255, 255, 255)"
+                            e.target.setAttribute("data-shaded", "1")
+                            e.target.removeAttribute("data-colored")
+                            e.target.removeAttribute("data-filled")
+                        } else if (!e.target.dataset.shaded && e.target.dataset.filled && !e.target.dataset.colored) {
+                            e.target.style.backgroundColor = `${newLighten(e.target.style.backgroundColor)}`
+                        } else if (!e.target.dataset.shaded && !e.target.dataset.filled && e.target.dataset.colored) {
+                            e.target.style.backgroundColor = `${newLighten(e.target.style.backgroundColor)}`
+                        } else {
+                            if (e.target.dataset.shaded < 18) {
+                                let shadeValue = parseFloat(e.target.getAttribute("data-shaded"));
+                                shadeValue++;
+                                e.target.setAttribute("data-shaded", `${shadeValue}`)
+                                e.target.style.backgroundColor = `${newLighten(e.target.style.backgroundColor)}`
                             }
                         }
                     }
@@ -148,25 +185,25 @@ function eraseBoard() {
     })
 };
 
-function eraseBtnOn () {
+function eraseBtnOn() {
     erase.value = "on"
     erase.style.color = "rgb(255, 255, 255)";
     erase.style.backgroundColor = "rgb(0, 0, 0)";
 }
 
-function eraseBtnOff () {
+function eraseBtnOff() {
     erase.value = "off";
     erase.style.color = "rgb(0, 0, 0)";
     erase.style.backgroundColor = "";
 }
 
-function rainbowBtnOn () {
+function rainbowBtnOn() {
     rainbow.value = "on";
     rainbow.style.color = "rgb(255, 255, 255)";
     rainbow.style.backgroundColor = "rgb(0, 0, 0)";
 }
 
-function rainbowBtnOff () {
+function rainbowBtnOff() {
     rainbow.value = "off";
     rainbow.style.color = "rgb(0, 0, 0)";
     rainbow.style.backgroundColor = "";
@@ -178,10 +215,22 @@ function shadeBtnOn() {
     shade.style.backgroundColor = "rgb(0, 0, 0)";
 }
 
-function shadeBtnOff () {
+function shadeBtnOff() {
     shade.value = "off";
     shade.style.color = "rgb(0, 0, 0)";
     shade.style.backgroundColor = "";
+}
+
+function lightBtnOn() {
+    light.value = "on";
+    light.style.color = "rgb(255, 255, 255)";
+    light.style.backgroundColor = "rgb(0, 0, 0)";
+}
+
+function lightBtnOff() {
+    light.value = "off";
+    light.style.color = "rgb(0, 0, 0)";
+    light.style.backgroundColor = "";
 }
 
 //changing toggle eraser button background color and ensuring that only
@@ -193,28 +242,44 @@ buttons.forEach((button) => {
                 eraseBtnOn();
                 rainbowBtnOff();
                 shadeBtnOff();
+                lightBtnOff();
             } else if (button.classList.contains("rainbow")) {
                 rainbowBtnOn();
                 eraseBtnOff();
                 shadeBtnOff();
+                lightBtnOff();
             } else if (button.classList.contains("shade")) {
                 shadeBtnOn();
                 rainbowBtnOff();
                 eraseBtnOff();
+                lightBtnOff();
+            } else if (button.classList.contains("lighten")) {
+                lightBtnOn();
+                eraseBtnOff();
+                rainbowBtnOff();
+                shadeBtnOff();
             }
         } else if (button.value == "on") {
             if (button.classList.contains("eraser")) {
                 eraseBtnOff();
                 rainbowBtnOff();
                 shadeBtnOff();
+                lightBtnOff();
             } else if (button.classList.contains("rainbow")) {
                 rainbowBtnOff();
                 eraseBtnOff();
                 shadeBtnOff();
+                lightBtnOff();
             } else if (button.classList.contains("shade")) {
                 shadeBtnOff();
                 rainbowBtnOff();
                 eraseBtnOff();
+                lightBtnOff();
+            } else if (button.classList.contains("lighten")) {
+                lightBtnOff();
+                eraseBtnOff();
+                rainbowBtnOff();
+                shadeBtnOff();
             }
         }
     })
@@ -248,4 +313,8 @@ function getBlue(color) {
 
 function newShade(color) {
     return `rgb(${getRed(color) - 15}, ${getGreen(color) - 15}, ${getBlue(color) - 15})`
+}
+
+function newLighten(color) {
+    return `rgb(${getRed(color) + 15}, ${getGreen(color) + 15}, ${getBlue(color) + 15})`
 }
