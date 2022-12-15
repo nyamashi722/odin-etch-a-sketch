@@ -10,12 +10,24 @@ body {
 .grid-container {
     display: grid;
     border-style: solid;
-    border-color: black;
+    border-color: rgb(0, 0, 0);
     height: 500px;
     width: 500px;
     grid-template-columns: repeat(25, 1fr);
+    margin: 0;
+    padding: 0;
 }
 
 .grid-cell {
-    border: 1px solid grey;
-}
+    border-top: 1px solid rgb(156, 156, 156);
+    border-left: 1px solid rgb(156, 156, 156);
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+};
+
+/* border looked thick because it was double bordered.
+adding a border only to the top and left sides of each div makes it single border.
+however, now there is no border for the divs in the right most column 
+and the bottom row. might be able to code a function that adds a border to these
+divs by referencing userInput of size of grid*/
