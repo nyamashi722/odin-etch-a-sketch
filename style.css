@@ -1,5 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Schoolbell&display=swap');
+
+@font-face {
+    font-family: 'gameon';
+    src: url('game_on.woff2') format('woff2'),
+         url('game_on.woff') format('woff');
+}
+
 body {
     display: flex;
+    background: linear-gradient(rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.7)), url("graffiti-background.jpg");
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     margin: 0;
@@ -7,15 +17,42 @@ body {
     width: 100vw;
 }
 
+.title-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: rgb(255, 255, 255);
+    border-radius: 25px;
+    padding: 10px;
+}
+
+.title-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.title {
+    font-size: 50px;
+    font-family: gameon;
+    margin: 0;
+}
+
 .grid-container {
     display: grid;
+    background-color: rgb(255, 255, 255);
     border-style: solid;
     border-color: rgb(0, 0, 0);
-    height: 500px;
-    width: 500px;
+    height: 600px;
+    width: 600px;
     grid-template-columns: repeat(25, 1fr);
-    margin: 0;
+    margin: 15px;
     padding: 0;
+}
+
+.title-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .grid-cell {
@@ -24,10 +61,86 @@ body {
     overflow: hidden;
     margin: 0;
     padding: 0;
-};
+}
 
-/* border looked thick because it was double bordered.
-adding a border only to the top and left sides of each div makes it single border.
-however, now there is no border for the divs in the right most column 
-and the bottom row. might be able to code a function that adds a border to these
-divs by referencing userInput of size of grid*/
+.right-border {
+    border-right: 1px solid rgb(156, 156, 156)
+}
+
+.bottom-border {
+    border-bottom: 1px solid rgb(156, 156, 156)
+}
+
+.sidebar {
+    display: flex;
+    justify-content: space-around;
+    background-color: rgb(156, 156, 156);
+    width: 606px;
+    height: 125px;
+
+}
+
+.units-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.button {
+    font-family: 'Schoolbell', cursive;
+    border-radius: 5px;
+    border: solid 1px;
+    height: 25px;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.button-container {
+    padding: 15px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: center;
+    align-content: space-evenly;
+    gap: 10px;
+}
+
+.size-units {
+    font-family: 'Schoolbell', cursive;
+    font-weight: 500;
+}
+
+.slider-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+}
+
+.slider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 200px;
+    height: 5px;
+    border-radius: 5px;
+    background: #d3d3d3;
+    outline: none;
+    opacity: 0.8;
+    -webkit-transition: 0.2s;
+    transition: opacity 0.2s;
+}
+
+.slider:hover {
+    opacity: 1;
+}
+
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: rgb(0, 0, 0);
+    cursor: default;
+}
