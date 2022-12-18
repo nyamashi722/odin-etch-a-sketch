@@ -6,13 +6,28 @@ for (i = 0; i < 625; i++) {
     gridContainer.appendChild(gridCell);
 }
 
+const fullGrid = document.querySelectorAll(".grid-cell")
+const rightColumn = document.querySelectorAll(".grid-cell:nth-child(25n)");
+const bottomRow = Array.from(fullGrid).slice(-`${25}`)
+
+for (i = 0; i < rightColumn.length; i++) {
+    rightColumn[i].classList.toggle("right-border")
+}
+
+for (i = 0; i < bottomRow.length; i++) {
+    bottomRow[i].classList.toggle("bottom-border")
+}
+
 const buttons = document.querySelectorAll("button");
 const clearBoard = document.querySelector(".erase-board");
 const erase = document.querySelector(".eraser");
-const size = document.querySelector(".size-selector");
 const rainbow = document.querySelector(".rainbow");
 const shade = document.querySelector(".shade");
 const light = document.querySelector(".lighten");
+const slider = document.querySelector(".slider");
+const output = document.querySelector(".grid-size");
+
+output.innerHTML = `${slider.value} x ${slider.value}`;
 
 function draw() {
     const grid = document.querySelectorAll(".grid-cell");
@@ -38,10 +53,12 @@ function draw() {
                         e.target.removeAttribute("data-filled")
                     } else if (!e.target.dataset.shaded && e.target.dataset.filled && !e.target.dataset.colored) {
                         e.target.style.backgroundColor = "rgb(0, 0, 0)"
+                        e.target.setAttribute("data-shaded", "1")
                     } else if (!e.target.dataset.shaded && !e.target.dataset.filled && e.target.dataset.colored) {
                         e.target.style.backgroundColor = `${newShade(e.target.style.backgroundColor)}`
+                        e.target.setAttribute("data-shaded", "1")
                     } else {
-                        if (e.target.dataset.shaded < 18) {
+                        if (e.target.dataset.shaded) {
                             let shadeValue = parseFloat(e.target.getAttribute("data-shaded"));
                             shadeValue++;
                             e.target.setAttribute("data-shaded", `${shadeValue}`)
@@ -56,10 +73,12 @@ function draw() {
                         e.target.removeAttribute("data-filled")
                     } else if (!e.target.dataset.shaded && e.target.dataset.filled && !e.target.dataset.colored) {
                         e.target.style.backgroundColor = `${newLighten(e.target.style.backgroundColor)}`
+                        e.target.setAttribute("data-shaded", "1")
                     } else if (!e.target.dataset.shaded && !e.target.dataset.filled && e.target.dataset.colored) {
                         e.target.style.backgroundColor = `${newLighten(e.target.style.backgroundColor)}`
+                        e.target.setAttribute("data-shaded", "1")
                     } else {
-                        if (e.target.dataset.shaded < 18) {
+                        if (e.target.dataset.shaded) {
                             let shadeValue = parseFloat(e.target.getAttribute("data-shaded"));
                             shadeValue++;
                             e.target.setAttribute("data-shaded", `${shadeValue}`)
@@ -98,10 +117,12 @@ function draw() {
                             e.target.removeAttribute("data-filled")
                         } else if (!e.target.dataset.shaded && e.target.dataset.filled && !e.target.dataset.colored) {
                             e.target.style.backgroundColor = "rgb(0, 0, 0)"
+                            e.target.setAttribute("data-shaded", "1")
                         } else if (!e.target.dataset.shaded && !e.target.dataset.filled && e.target.dataset.colored) {
                             e.target.style.backgroundColor = `${newShade(e.target.style.backgroundColor)}`
+                            e.target.setAttribute("data-shaded", "1")
                         } else {
-                            if (e.target.dataset.shaded < 18) {
+                            if (e.target.dataset.shaded) {
                                 let shadeValue = parseFloat(e.target.getAttribute("data-shaded"));
                                 shadeValue++;
                                 e.target.setAttribute("data-shaded", `${shadeValue}`)
@@ -116,10 +137,12 @@ function draw() {
                             e.target.removeAttribute("data-filled")
                         } else if (!e.target.dataset.shaded && e.target.dataset.filled && !e.target.dataset.colored) {
                             e.target.style.backgroundColor = `${newLighten(e.target.style.backgroundColor)}`
+                            e.target.setAttribute("data-shaded", "1")
                         } else if (!e.target.dataset.shaded && !e.target.dataset.filled && e.target.dataset.colored) {
                             e.target.style.backgroundColor = `${newLighten(e.target.style.backgroundColor)}`
+                            e.target.setAttribute("data-shaded", "1")
                         } else {
-                            if (e.target.dataset.shaded < 18) {
+                            if (e.target.dataset.shaded) {
                                 let shadeValue = parseFloat(e.target.getAttribute("data-shaded"));
                                 shadeValue++;
                                 e.target.setAttribute("data-shaded", `${shadeValue}`)
@@ -142,18 +165,35 @@ function draw() {
 
 draw();
 
-function selectSize() {
+slider.oninput = function () {
+    output.innerHTML = `${this.value} x ${this.value}`;
+}
+
+slider.onchange = function() {
     removeGrid (gridContainer);
-    let userInput = prompt("Please enter the size of the sketchpad (max size = 100")
-    while (userInput > 100 || userInput == 0 || userInput < 0 || userInput === null) {
-        userInput = prompt("Please enter another number that is less than 100")
-    }
-    for (i = 0; i < (userInput**2); i++) {
+    const slider = document.querySelector(".slider");
+    const output = document.querySelector(".grid-size");
+    
+    for (i = 0; i < (slider.value**2); i++) {
         const gridCell = document.createElement("div");
-        gridCell.classList.add("grid-cell");
+        gridCell.classList.toggle("grid-cell");
         gridContainer.appendChild(gridCell);
     }
-    gridContainer.style.gridTemplateColumns = `repeat(${userInput}, 1fr)`;
+        
+    gridContainer.style.gridTemplateColumns = `repeat(${slider.value}, 1fr)`;
+
+    const fullGrid = document.querySelectorAll(".grid-cell");
+    const rightColumn = document.querySelectorAll(`.grid-cell:nth-child(${slider.value}n)`);
+    const bottomRow = Array.from(fullGrid).slice(-`${slider.value}`)
+
+    for (i = 0; i < rightColumn.length; i++) {
+        rightColumn[i].classList.toggle("right-border")
+    }
+
+    for (i = 0; i < bottomRow.length; i++) {
+        bottomRow[i].classList.toggle("bottom-border")
+    }
+
     draw();
 }
 
@@ -162,16 +202,6 @@ function removeGrid (parent) {
         parent.removeChild(parent.firstChild)
     }
 }
-
-size.addEventListener("click", selectSize)
-
-window.addEventListener("mousedown", () => {
-    mouseDown = true;
-})
-
-window.addEventListener("mouseup", () => {
-    mouseDown = false;
-})
 
 clearBoard.addEventListener("click", eraseBoard);
 
